@@ -134,6 +134,27 @@ describe('dispatchInboundToAiReply — eligibility gates', () => {
     expect(systemPrompt).toContain('Returns accepted within 30 days.')
   })
 
+  it('passes the selected OpenRouter provider and model to generation', async () => {
+    h.loadAiConfig.mockResolvedValue(
+      aiConfig({
+        provider: 'openrouter',
+        model: 'anthropic/claude-sonnet-4',
+        apiKey: 'sk-or-v1-test',
+      }),
+    )
+
+    await dispatchInboundToAiReply(ARGS)
+
+    expect(h.generateReply).toHaveBeenCalledWith(
+      expect.objectContaining({
+        config: expect.objectContaining({
+          provider: 'openrouter',
+          model: 'anthropic/claude-sonnet-4',
+        }),
+      }),
+    )
+  })
+
   it('stands down when an active message-level automation exists', async () => {
     h.state.autoResponders = [{ id: 'auto-1' }]
     await dispatchInboundToAiReply(ARGS)

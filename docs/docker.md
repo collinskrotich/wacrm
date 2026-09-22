@@ -60,6 +60,11 @@ docker run -d --env-file .env.local -e PORT=3000 -p 3000:3000 wacrm
 - Database migrations under `supabase/` are **not** run by the
   container — apply them with the Supabase CLI as described in the
   README.
+- OpenRouter API keys are entered per account in **Settings → AI
+  Assistant** and encrypted in `ai_configs`; do not add them to
+  `.env.local`. Optional `OPENROUTER_HTTP_REFERER` and
+  `OPENROUTER_APP_TITLE` runtime variables only add app-attribution
+  headers. See [OpenRouter setup and EC2 deployment](./openrouter.md).
 - Received attachments are copied into the `chat-media` Supabase
   Storage bucket, because Meta deletes media roughly 30 days after it
   arrives and the copy is the only thing that outlives that. It grows

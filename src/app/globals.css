@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -61,7 +61,7 @@
  * THEMING — two orthogonal dimensions
  *
  *   1. MODE   (light / dark)  → neutral surfaces. Selected with
- *      `document.documentElement.dataset.mode`. Defaults to dark.
+ *      `document.documentElement.dataset.mode`. Defaults to light.
  *   2. ACCENT (violet / …)    → the primary color only. Selected
  *      with `document.documentElement.dataset.theme`.
  *
@@ -72,7 +72,7 @@
  * --sidebar-ring) live in the ACCENT blocks. They set disjoint
  * variables, so cascade order between them doesn't matter.
  *
- * `:root` carries the dark-mode + violet defaults so a visitor
+ * `:root` carries the light-mode + lime defaults so a visitor
  * renders correctly before JS runs; the boot script in
  * layout.tsx replays the saved mode + accent before first paint.
  *
@@ -86,8 +86,7 @@
 
 /* ---- MODE: neutral surfaces ---- */
 
-:root,
-html[data-mode="dark"] {
+html[data-mode='dark'] {
   --background: oklch(0.13 0.01 260);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.18 0.01 260);
@@ -116,11 +115,12 @@ html[data-mode="dark"] {
   --sidebar-border: oklch(0.28 0.01 260);
 }
 
-html[data-mode="light"] {
-  --background: oklch(0.99 0.002 260);
+:root,
+html[data-mode='light'] {
+  --background: #f3f3f7;
   --foreground: oklch(0.21 0.01 260);
   --card: oklch(1 0 0);
-  --card-2: oklch(0.985 0.002 260);
+  --card-2: #f5f5f8;
   --card-foreground: oklch(0.21 0.01 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.01 260);
@@ -147,8 +147,7 @@ html[data-mode="light"] {
 
 /* ---- ACCENT: primary color ---- */
 
-:root,
-html[data-theme="violet"] {
+html[data-theme='violet'] {
   --primary: oklch(0.526 0.247 293);
   --primary-foreground: oklch(0.985 0 0);
   --primary-hover: oklch(0.6 0.22 293);
@@ -161,7 +160,7 @@ html[data-theme="violet"] {
   --sidebar-ring: oklch(0.526 0.247 293);
 }
 
-html[data-theme="emerald"] {
+html[data-theme='emerald'] {
   --primary: oklch(0.62 0.16 162);
   --primary-foreground: oklch(0.16 0.02 162);
   --primary-hover: oklch(0.68 0.15 162);
@@ -175,7 +174,7 @@ html[data-theme="emerald"] {
   --sidebar-ring: oklch(0.62 0.16 162);
 }
 
-html[data-theme="cobalt"] {
+html[data-theme='cobalt'] {
   --primary: oklch(0.585 0.2 254);
   --primary-foreground: oklch(0.985 0 0);
   --primary-hover: oklch(0.66 0.18 254);
@@ -189,7 +188,7 @@ html[data-theme="cobalt"] {
   --sidebar-ring: oklch(0.585 0.2 254);
 }
 
-html[data-theme="amber"] {
+html[data-theme='amber'] {
   --primary: oklch(0.745 0.16 65);
   --primary-foreground: oklch(0.18 0.03 65);
   --primary-hover: oklch(0.8 0.15 65);
@@ -203,7 +202,7 @@ html[data-theme="amber"] {
   --sidebar-ring: oklch(0.745 0.16 65);
 }
 
-html[data-theme="rose"] {
+html[data-theme='rose'] {
   --primary: oklch(0.645 0.22 16);
   --primary-foreground: oklch(0.985 0 0);
   --primary-hover: oklch(0.71 0.2 16);
@@ -227,4 +226,69 @@ html[data-theme="rose"] {
   html {
     @apply font-sans;
   }
+}
+/* Lime uses a darker ink token for text links on pale surfaces. */
+:root,
+html[data-theme='lime'] {
+  --primary: #527b0b;
+  --primary-foreground: #ffffff;
+  --primary-hover: #426309;
+  --primary-soft: #bdf44926;
+  --primary-soft-2: #bdf44940;
+  --ring: #719c25;
+  --chart-1: #9ed52d;
+  --sidebar-primary: #bdf449;
+  --sidebar-primary-foreground: #17181c;
+  --sidebar-ring: #719c25;
+}
+html[data-mode='dark'][data-theme='lime'] {
+  --primary: #bdf449;
+  --primary-foreground: #17181c;
+  --primary-hover: #cdf879;
+}
+
+/* Workspace framing shared by every dashboard route. */
+.workspace-shell {
+  --workspace-highlight: #bdf449;
+}
+.workspace-sidebar {
+  box-shadow: 0 4px 24px rgb(24 24 32 / 3%);
+}
+.dashboard-panel {
+  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--border) 45%, transparent);
+  background: var(--card);
+  box-shadow: 0 3px 16px rgb(24 24 32 / 2%);
+}
+.dashboard-panel > header {
+  border-bottom: 0;
+  padding: 1.5rem 1.5rem 1rem;
+}
+.dashboard-panel > footer {
+  border-color: color-mix(in srgb, var(--border) 55%, transparent);
+}
+.dashboard-metric {
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+}
+.dashboard-metric-featured {
+  --foreground: #ffffff;
+  --muted-foreground: #bcbcc6;
+  --muted: #303137;
+  --primary: #bdf449;
+  background: #17181c;
+  border-color: #17181c;
+}
+.workspace-shell :is(a, button):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.dashboard-pipeline-visual {
+  --foreground: #17181c;
+  --muted-foreground: #3f511f;
+  --muted: #a4d13f;
+  background: var(--workspace-highlight, #bdf449);
 }
